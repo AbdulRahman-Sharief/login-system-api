@@ -12,6 +12,7 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    command: ['postgres', '-c', 'listen_addresses=*']
 
 volumes:
   pgdata:

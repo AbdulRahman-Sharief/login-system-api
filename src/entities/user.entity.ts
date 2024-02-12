@@ -5,13 +5,13 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
-  Unique,
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import * as bcrypt from 'bcrypt';
 import { IsEmail, IsString } from 'class-validator';
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { AccountEntity } from './account.entity';
+import { TwoFactorConfirmationEntity } from './tfc.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -59,13 +59,4 @@ export class UserEntity extends AbstractEntity {
   toJSON() {
     return instanceToPlain(this);
   }
-}
-
-@Entity()
-@Unique(['userId'])
-export class TwoFactorConfirmationEntity extends AbstractEntity {
-  userId: string;
-  @OneToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'userId' })
-  user: UserEntity;
 }
