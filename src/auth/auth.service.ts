@@ -17,6 +17,7 @@ export class AuthService {
   ) {}
 
   async register(credentials: RegisterDTO) {
+    console.log(credentials);
     try {
       const user = this.userRepo.create(credentials);
       await user.save();
