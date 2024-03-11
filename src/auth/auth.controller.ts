@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
+import { GoogleOauthGuard } from './guards/google-oauth.guard';
+import { Response } from 'express';
+import { GoogleStrategy } from './guards/google-oauth.strategy';
 
 @Controller('auth')
 export class AuthController {
@@ -20,5 +23,16 @@ export class AuthController {
   @Post('login/social')
   socialLogin(@Body(ValidationPipe) credentials:SocialLoginDTO){
     return this.authService.sociaLogin(credentials);
+  }
+
+  @Get('callback/google')
+  @UseGuards(GoogleOauthGuard)
+  async googleAuthCallback(@Req() req:Request , @Res() res:Response){
+    return {msg:'Authentication with Google'}
+  }
+  @Get('google/redirect')
+  @UseGuards(GoogleOauthGuard)
+  handleRedirect(@Req() req:Request){
+    return this.authService.oAuthLogin(req)
   }
 }

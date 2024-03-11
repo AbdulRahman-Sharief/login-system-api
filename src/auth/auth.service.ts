@@ -53,4 +53,21 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Credentials');
     }
   }
+async oAuthLogin(req){
+  if (!req.user) {
+    return 'No user from google';
+  }
+console.log(JSON.stringify(req.profile))
+  return {
+    message: 'User information from google',
+    user: req.user,
+   
+  };
 }
+
+// const payload  = {email:user.email,name:user.name};
+// const jwt = await this.jwtService.sign(payload);
+// return {jwt};
+
+}
+
