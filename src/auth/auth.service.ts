@@ -9,11 +9,14 @@ import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
+import { SocialLoginDTO } from './dtos/login.social.dto';
+import { AccountEntity } from 'src/entities/account.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    @InjectRepository(AccountEntity) private accountRepo : Repository<AccountEntity>
   ) {}
 
   async register(credentials: RegisterDTO) {
@@ -36,6 +39,16 @@ export class AuthService {
       if (!(await user.comparePassword(credentials.password)))
         throw new UnauthorizedException('Invalid Credentials');
       return user;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+  }
+
+  async sociaLogin(credentials: SocialLoginDTO) {
+    try {
+      const account = this.accountRepo.create(credentials);
+      await account.save();
+      return account;
     } catch (error) {
       throw new UnauthorizedException('Invalid Credentials');
     }

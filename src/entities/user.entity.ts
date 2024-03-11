@@ -46,7 +46,7 @@ export class UserEntity extends AbstractEntity {
   @JoinColumn({ name: 'tfcId' })
   twoFactorConfirmation: TwoFactorConfirmationEntity;
   @Column()
-  @Exclude()
+  // @Exclude() DONOT EXCLUDE TILL ISLOGGEDIN ENDPOINT IS IMPLEMENTED
   password: string;
 
   @BeforeInsert()

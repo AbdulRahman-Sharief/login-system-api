@@ -5,7 +5,7 @@ import { UserEntity } from './user.entity';
 @Unique(['provider', 'providerAccountId'])
 export class AccountEntity extends AbstractEntity {
   @Column()
-  userId: string;
+  userId: number;
   @Column()
   type: string;
   @Column()
@@ -17,7 +17,7 @@ export class AccountEntity extends AbstractEntity {
   @Column('text')
   access_token: string;
   @Column()
-  expires_at: number;
+  expires_at: Date;
   @Column()
   token_type: string;
   @Column()
