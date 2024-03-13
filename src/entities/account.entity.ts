@@ -16,18 +16,18 @@ export class AccountEntity extends AbstractEntity {
   refresh_token: string;
   @Column('text')
   access_token: string;
-  @Column()
-  expires_at: Date;
+  // @Column()
+  // expires_at: Date;
   @Column()
   token_type: string;
   @Column()
   scope: string;
-  @Column('text')
-  id_token: string;
-  @Column()
-  session_state: string;
+  // @Column('text')
+  // id_token: string;
+  // @Column()
+  // session_state: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'UserId' })
+  @JoinColumn({ name: 'userId' })
   user: UserEntity;
 }

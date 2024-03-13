@@ -6,10 +6,13 @@ import { SocialLoginDTO } from './dtos/login.social.dto';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { Response } from 'express';
 import { GoogleStrategy } from './guards/google-oauth.strategy';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService
+    ,private usersService:UsersService
+    ) {}
   @Post('/register')
   register(@Body(ValidationPipe) credentials: RegisterDTO) {
     // console.log(credentials);
@@ -32,7 +35,10 @@ export class AuthController {
   }
   @Get('google/redirect')
   @UseGuards(GoogleOauthGuard)
-  handleRedirect(@Req() req:Request){
-    return this.authService.oAuthLogin(req)
+  async handleRedirect(@Req() req:any){
+   
+    const user =await this.usersService.getUserByEmail({email:req.user.email});
+ 
+    return this.authService.oAuthLogin(req,user)
   }
 }

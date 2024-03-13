@@ -45,13 +45,15 @@ export class UserEntity extends AbstractEntity {
   @OneToOne(() => TwoFactorConfirmationEntity, (tfc) => tfc.id)
   @JoinColumn({ name: 'tfcId' })
   twoFactorConfirmation: TwoFactorConfirmationEntity;
-  @Column()
+  @Column({nullable:true})
   // @Exclude() DONOT EXCLUDE TILL ISLOGGEDIN ENDPOINT IS IMPLEMENTED
   password: string;
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    if(this.password !== null){
+      this.password = await bcrypt.hash(this.password, 10);
+    }
   }
   async comparePassword(attemptedPassword: string) {
     return await bcrypt.compare(attemptedPassword, this.password);
