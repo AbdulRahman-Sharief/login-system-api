@@ -18,4 +18,10 @@ export class UsersService {
     const user = await this.userRepo.findOne({ where: { id } });
     return user;
   }
+  async getUserByUsername(username:string,provider:string){
+    // const user = await this.userRepo.findOne({where:{username}});
+    const user = await this.userRepo.createQueryBuilder('user').innerJoinAndSelect('user.accounts','account').where('user.username= :username',{username}).andWhere('account.provider= :provider',{provider}).getOne();
+    console.log('USER FROM SERVICE:' ,user)
+    return user;
+  }
 }

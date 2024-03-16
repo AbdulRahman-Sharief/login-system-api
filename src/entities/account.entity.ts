@@ -12,7 +12,7 @@ export class AccountEntity extends AbstractEntity {
   provider: string;
   @Column()
   providerAccountId: string;
-  @Column('text')
+  @Column('text',{nullable:true})
   refresh_token: string;
   @Column('text')
   access_token: string;
@@ -27,7 +27,7 @@ export class AccountEntity extends AbstractEntity {
   // @Column()
   // session_state: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.accounts, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 }

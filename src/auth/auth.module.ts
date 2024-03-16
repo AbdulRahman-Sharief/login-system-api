@@ -10,6 +10,8 @@ import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GoogleStrategy } from './guards/google-oauth.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
+import { GithubOauthGuard } from './guards/github-oauth.guard';
+import { GithubStrategy } from './guards/github-oauth.strategy';
 
 @Module({
   imports: [JwtModule.registerAsync({
@@ -21,7 +23,7 @@ import { UsersService } from 'src/users/users.service';
       global:true,
     })
   }),ConfigModule.forRoot(),TypeOrmModule.forFeature([UserEntity,AccountEntity])],
-  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,UsersService],
+  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,UsersService],
   controllers: [AuthController],
 })
 export class AuthModule {}

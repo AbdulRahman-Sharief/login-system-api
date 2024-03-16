@@ -67,8 +67,9 @@ async oAuthLogin(req:any,userFound:any){
       emailVerifiedAt:new Date().toISOString(),
       image:req.user.picture
     }
-    const user =await this.userRepo.save(userCredentials)
-    const UserData = await user.save();
+    const UserData =await this.userRepo.save(userCredentials)
+    // console.log(UserData)
+   
   console.log('SAVED USER: ',UserData);
     //create account
     const accountCredentials = {
@@ -102,6 +103,54 @@ async oAuthLogin(req:any,userFound:any){
   return {message:"User Found!",userFound}
 }
 
+async oAuthGitHubLogin(req:any,userFound:any){
+  if (!req.user) {
+    return 'No user from google';
+  }
+  //query the user in the db to know if the user exist or not.
+  if(!userFound){
+    //create user
+    const userCredentials = {
+      username:req.user.name,
+      email:null,
+      password:null,
+      emailVerifiedAt:new Date().toISOString(),
+      image:req.user.picture
+    }
+    const UserData =await this.userRepo.save(userCredentials)
+
+  console.log('SAVED USER: ',UserData);
+    //create account
+    const accountCredentials = {
+      userId:UserData.id,
+      type:req.user.type,
+      provider:req.user.provider,
+      providerAccountId:req.user.providerId,
+      access_token:req.user._accessToken,
+      refresh_token:null,
+      emailVerified:true,
+      token_type:'jwt',
+      scope:'profile',
+    }
+  const account = this.accountRepo.create(accountCredentials);
+  const accountData = await account.save();
+  console.log(accountData);
+    console.log('USER: ',req.user)
+    console.log('REQ: ',req.user)
+    return {
+      message: 'User information from google',
+      user: req.user,
+      UserData,
+      accountData
+     
+    };
+  }
+  if(userFound.image !== req.user.picture){
+    const user =await this.userRepo.update(userFound.id,{image:req.user.picture})
+    return {message:"User image updated upon login.",userFound}
+  }
+  return {message:"User Found!",userFound}
+}
 // const payload  = {email:user.email,name:user.name};
 // const jwt = await this.jwtService.sign(payload);
 // return {jwt};

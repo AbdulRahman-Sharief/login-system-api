@@ -24,7 +24,7 @@ export class UserEntity extends AbstractEntity {
   @IsString()
   username: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true ,nullable:true})
   @IsEmail()
   email: string;
   @Column()
@@ -36,9 +36,9 @@ export class UserEntity extends AbstractEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
-  @OneToMany(() => AccountEntity, (account) => account.id)
+  @OneToMany(() => AccountEntity, (account) => account.user)
   @JoinColumn({ name: 'accountId' })
-  accounts: AccountEntity;
+  accounts: AccountEntity[];
 
   @Column({ default: false })
   isTwoFactorEnabled: boolean;
