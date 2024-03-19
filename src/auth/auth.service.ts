@@ -11,12 +11,14 @@ import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
 import { AccountEntity } from 'src/entities/account.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-    @InjectRepository(AccountEntity) private accountRepo : Repository<AccountEntity>
+    @InjectRepository(AccountEntity) private accountRepo : Repository<AccountEntity>,
+    private jwtService: JwtService
   ) {}
 
   async register(credentials: RegisterDTO) {
@@ -36,10 +38,17 @@ export class AuthService {
       const user = await this.userRepo.findOne({
         where: { email: credentials.email },
       });
-      if (!(await user.comparePassword(credentials.password)))
-        throw new UnauthorizedException('Invalid Credentials');
-      return user;
+      if(!user) throw new UnauthorizedException('Invalid Username or Password!');
+// console.log(user)
+const isPassCorrect = await user.comparePassword(credentials.password);
+// console.log(isPassCorrect)
+      if (!isPassCorrect){
+        throw new UnauthorizedException('Invalid Credentials');}
+        const payload = { sub: user.id, username: user.username };
+        const accessToken = await this.jwtService.signAsync(payload);
+      return {access_token: accessToken};
     } catch (error) {
+      console.log(error)
       throw new UnauthorizedException('Invalid Credentials');
     }
   }

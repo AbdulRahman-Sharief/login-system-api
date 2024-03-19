@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { AccountEntity } from 'src/entities/account.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtGuard } from './guards/jwt-auth.guard';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GoogleStrategy } from './guards/google-oauth.strategy';
@@ -12,18 +12,23 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 import { GithubOauthGuard } from './guards/github-oauth.guard';
 import { GithubStrategy } from './guards/github-oauth.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtGuardStrategy } from './guards/jwt-auth.strategy';
 
 @Module({
-  imports: [JwtModule.registerAsync({
-    useFactory:()=>({
-      secret:process.env.JWT_SECRET,
+  imports: [ConfigModule.forRoot({
+    envFilePath:['.env']
+  }),PassportModule.register({ defaultStrategy: 'jwt' }),JwtModule.registerAsync({
+    useFactory:async ()=>({
+      secret: process.env.JWT_SECRET || 'defaultSecret',
       signOptions:{
         expiresIn:'3d',
       },
       global:true,
     })
-  }),ConfigModule.forRoot(),TypeOrmModule.forFeature([UserEntity,AccountEntity])],
-  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,UsersService],
+  }),TypeOrmModule.forFeature([UserEntity,AccountEntity])],
+  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,UsersService,JwtGuardStrategy],
   controllers: [AuthController],
+  exports: [JwtModule, PassportModule]
 })
 export class AuthModule {}
