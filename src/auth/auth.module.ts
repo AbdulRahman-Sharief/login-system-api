@@ -23,7 +23,7 @@ import { LocalStrategy } from './guards/local-auth.strategy';
     useFactory:async ()=>({
       secret: process.env.JWT_SECRET || 'defaultSecret',
       signOptions:{
-        expiresIn:'3d',
+        expiresIn:'3h',
       },
       global:true,
     })
