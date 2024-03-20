@@ -20,7 +20,7 @@ export enum UserRole {
 
 @Entity('users')
 export class UserEntity extends AbstractEntity {
-  @Column({ unique: true })
+  @Column({ unique: true,nullable:true })
   @IsString()
   username: string;
 

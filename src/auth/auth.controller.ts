@@ -48,7 +48,8 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleOauthGuard)
   async handleGoogleRedirect(@Req() req:any){
-    const user =await this.usersService.getUserByUsername(`${req.user.name.givenName}-${req.user.name.familyName}`,'google');
+    // const user =await this.usersService.getUserByUsername(`${req.user.name.givenName}-${req.user.name.familyName}`,'google');
+    const user = await this.usersService.getUserByEmail({email:req.user.email})
  console.log(user);
     return this.authService.oAuthLogin(req,user)
   }

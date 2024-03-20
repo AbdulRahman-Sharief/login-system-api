@@ -57,7 +57,7 @@ async oAuthLogin(req:any,userFound:any){
   if(!userFound){
     //create user
     const userCredentials = {
-      username:`${req.user.name.givenName}-${req.user.name.familyName}`,
+      username:null,
       email:req.user.email,
       password:null,
       emailVerifiedAt:new Date().toISOString(),
