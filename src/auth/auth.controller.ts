@@ -9,47 +9,57 @@ import { GoogleStrategy } from './guards/google-oauth.strategy';
 import { UsersService } from 'src/users/users.service';
 import { GithubOauthGuard } from './guards/github-oauth.guard';
 import { GithubStrategy } from './guards/github-oauth.strategy';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtGuard } from './guards/jwt-auth.guard';
+import { Public } from 'src/decorators/Public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService
     ,private usersService:UsersService
     ) {}
+
+  @Public()
   @Post('/register')
   register(@Body(ValidationPipe) credentials: RegisterDTO) {
     // console.log(credentials);
     return this.authService.register(credentials);
   }
 
+  @Public()
+  @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Body(ValidationPipe) credentials: LoginDTO) {
-    return this.authService.login(credentials);
+  login(@Req() req:any) {
+    //you can remove LoginDTO.
+    return this.authService.login(req);
   }
+  @Public()
   @Post('login/social')
   socialLogin(@Body(ValidationPipe) credentials:SocialLoginDTO){
     return this.authService.sociaLogin(credentials);
   }
-
+@Public()
   @Get('callback/google')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(@Req() req:Request , @Res() res:Response){
     return {msg:'Authentication with Google'}
   }
+  @Public()
   @Get('google/redirect')
   @UseGuards(GoogleOauthGuard)
   async handleGoogleRedirect(@Req() req:any){
-   
     const user =await this.usersService.getUserByUsername(`${req.user.name.givenName}-${req.user.name.familyName}`,'google');
  console.log(user);
     return this.authService.oAuthLogin(req,user)
   }
-
+@Public()
   @Get('callback/github')
   @UseGuards(GithubOauthGuard)
   async githubAuthCallback(@Req() req:Request , @Res() res:Response){
     console.log('Authentication with GitHub')
     return {msg:'Authentication with GitHub'}
   }
+  @Public()
   @Get('github/redirect')
   @UseGuards(GithubOauthGuard)
   async handleGithubRedirect(@Req() req:any){
@@ -60,5 +70,11 @@ export class AuthController {
  console.log("REQ USER",req.user);
     return this.authService.oAuthGitHubLogin(req,user)
     // return {msg:"HandleGitHubRedirect"}
+  }
+
+
+  @Get('/profile')
+  getProfile(@Req() req:any){
+    return req.user;
   }
 }

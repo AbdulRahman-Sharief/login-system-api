@@ -14,6 +14,7 @@ import { GithubOauthGuard } from './guards/github-oauth.guard';
 import { GithubStrategy } from './guards/github-oauth.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtGuardStrategy } from './guards/jwt-auth.strategy';
+import { LocalStrategy } from './guards/local-auth.strategy';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -27,7 +28,7 @@ import { JwtGuardStrategy } from './guards/jwt-auth.strategy';
       global:true,
     })
   }),TypeOrmModule.forFeature([UserEntity,AccountEntity])],
-  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,UsersService,JwtGuardStrategy],
+  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,LocalStrategy,UsersService,JwtGuardStrategy],
   controllers: [AuthController],
   exports: [JwtModule, PassportModule]
 })

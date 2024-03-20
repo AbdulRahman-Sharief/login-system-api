@@ -29,29 +29,16 @@ export class AuthService {
       return user;
     } catch (error) {
       if (error.code === '23505')
-        throw new ConflictException('Username has already been taken');
+        throw new ConflictException('Username or Email has already been taken');
       throw new InternalServerErrorException();
     }
   }
-  async login(credentials: LoginDTO) {
-    try {
-      const user = await this.userRepo.findOne({
-        where: { email: credentials.email },
-      });
-      if(!user) throw new UnauthorizedException('Invalid Username or Password!');
-// console.log(user)
-const isPassCorrect = await user.comparePassword(credentials.password);
-// console.log(isPassCorrect)
-      if (!isPassCorrect){
-        throw new UnauthorizedException('Invalid Credentials');}
-        const payload = { sub: user.id, username: user.username };
+  async login(req:any) {
+    console.log(req)
+        const payload = { sub: req.user.id, username: req.user.username };
         const accessToken = await this.jwtService.signAsync(payload);
       return {access_token: accessToken};
-    } catch (error) {
-      console.log(error)
-      throw new UnauthorizedException('Invalid Credentials');
-    }
-  }
+   }
 
   async sociaLogin(credentials: SocialLoginDTO) {
     try {
@@ -164,6 +151,16 @@ async oAuthGitHubLogin(req:any,userFound:any){
 // const jwt = await this.jwtService.sign(payload);
 // return {jwt};
 //provider,providerId, email,name,picture
-
+async validateUser(username:string,password:string){
+  const user = await this.userRepo.findOne({where:{username}});
+  console.log(user)
+  const isPasswordCorrect = await user.comparePassword(password);
+  console.log(isPasswordCorrect)
+  if(user && (await user.comparePassword(password))){
+    console.log(user)
+    return user;
+  }
+  return null;
+}
 }
 
