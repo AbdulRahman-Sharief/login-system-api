@@ -9,10 +9,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { Public } from 'src/decorators/Public.decorator';
+import { EmailService } from 'src/email/email.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService,
+    private readonly emailService:EmailService) {}
 
   @Post()
   async getUserByEmail(@Body() body: any) {
@@ -33,5 +36,12 @@ export class UsersController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     return user;
+  }
+  @Public()
+  @Post('test-send-email')
+  async SendEmail(@Body() SendEmailDTO:{recipient:string; body:string}){
+    // console.log(SendEmailDTO);
+    await this.emailService.example(SendEmailDTO.recipient,SendEmailDTO.body)
+    
   }
 }
