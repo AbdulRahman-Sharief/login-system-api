@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dtos/register.dto';
 import { LoginDTO } from './dtos/login.dto';
@@ -80,6 +80,13 @@ forgetPassword(@Body() body:{email:string},@Req() req:Request){
   // console.log(`${req.protocol}://${req.get('Host')}${req.originalUrl}`);
   // console.log(req.protocol)
 return this.authService.forgotPassword(body.email,req);
+}
+
+@Public()
+@Post('/reset-password/:token')
+resetPassword(@Param('token') token:string,@Body() body:{password:string,passwordConfirm:string}){
+console.log(token,body)
+return this.authService.resetPassword(token,body.password,body.passwordConfirm);
 }
 
   @Get('/profile')

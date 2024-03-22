@@ -31,7 +31,7 @@ import { EmailService } from 'src/email/email.service';
       global:true,
     })
   }),TypeOrmModule.forFeature([UserEntity,AccountEntity,PasswordResetToken])],
-  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,LocalStrategy,UsersService,JwtGuardStrategy,EmailService],
+  providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,LocalStrategy,UsersService,JwtGuardStrategy,EmailService,UsersService],
   controllers: [AuthController],
   exports: [JwtModule, PassportModule]
 })

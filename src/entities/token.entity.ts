@@ -15,11 +15,11 @@ export class VerificationToken extends AbstractEntity {
 @Entity()
 @Unique(['email', 'token'])
 export class PasswordResetToken extends AbstractEntity {
-  @Column()
+  @Column({nullable:true})
   email: string;
-  @Column({ unique: true })
+  @Column({ unique: true ,nullable:true})
   token: string;
-  @Column()
+  @Column({nullable:true})
   expires: Date;
 
   @BeforeInsert()

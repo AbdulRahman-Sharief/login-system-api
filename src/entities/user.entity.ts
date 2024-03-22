@@ -1,5 +1,6 @@
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -49,7 +50,11 @@ export class UserEntity extends AbstractEntity {
   @Exclude() 
   password: string;
 
-  @BeforeInsert()
+@Column({nullable:true}) //temporarliy
+passwordChangedAt:Date;
+  
+@BeforeInsert()
+@BeforeUpdate()
   async hashPassword() {
     if(this.password !== null){
       this.password = await bcrypt.hash(this.password, 10);

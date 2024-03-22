@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - TZ=Africa/Cairo
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     command: ['postgres', '-c', 'listen_addresses=*']
