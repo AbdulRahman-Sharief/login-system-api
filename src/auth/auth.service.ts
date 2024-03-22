@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,13 +13,17 @@ import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
 import { AccountEntity } from 'src/entities/account.entity';
 import { JwtService } from '@nestjs/jwt';
+import { PasswordResetToken } from 'src/entities/token.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
     @InjectRepository(AccountEntity) private accountRepo : Repository<AccountEntity>,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    @InjectRepository(PasswordResetToken) private passwordResetTokenRepo: Repository<PasswordResetToken>,
+    private emailService:EmailService
   ) {}
 
   async register(credentials: RegisterDTO) {
@@ -147,10 +152,7 @@ async oAuthGitHubLogin(req:any,userFound:any){
   }
   return {message:"User Found!",userFound}
 }
-// const payload  = {email:user.email,name:user.name};
-// const jwt = await this.jwtService.sign(payload);
-// return {jwt};
-//provider,providerId, email,name,picture
+
 async validateUser(username:string,password:string){
   const user = await this.userRepo.findOne({where:{username}});
   console.log(user)
@@ -161,6 +163,22 @@ async validateUser(username:string,password:string){
     return user;
   }
   return null;
+}
+async forgotPassword(email:string,req:any){
+//check if user exists in our db.
+console.log(email)
+const user = await this.userRepo.findOne({where:{email}});
+if(!user) throw new NotFoundException("email or username provided are not found in our database!")
+//generate jwtToken with expiration of 10 mins and store it in the database.
+const reset_token = this.passwordResetTokenRepo.create({email});
+const token = await reset_token.save();
+console.log(reset_token)
+const resetURL = `${req.protocol}://${req.get(
+  'host'
+)}/api/v1/auth/reset-password/${token.token}`;
+console.log(resetURL)
+const SendEmail = await this.emailService.example(email,resetURL);
+return {reset_token}
 }
 }
 

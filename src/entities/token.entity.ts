@@ -1,5 +1,6 @@
-import { Column, Entity, Unique } from 'typeorm';
+import { BeforeInsert, Column, Entity, Unique } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
+import * as crypto from 'crypto';
 @Entity()
 @Unique(['email', 'token'])
 export class VerificationToken extends AbstractEntity {
@@ -20,6 +21,15 @@ export class PasswordResetToken extends AbstractEntity {
   token: string;
   @Column()
   expires: Date;
+
+  @BeforeInsert()
+  async createPasswordResetToken(){
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.token = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.expires =new Date(Date.now() + 10 * 60 * 1000)
+    console.log(this.expires);
+    return resetToken;
+  }
 }
 
 @Entity()

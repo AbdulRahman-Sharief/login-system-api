@@ -12,7 +12,7 @@ export class EmailService {
             from: 'AbdulRahman <AbdulrahmanSharief2@gmail.com>', // sender address
             subject: 'Testing Nest MailerModule ✔', // Subject line
             text: body, // plaintext body
-            html: '<b>welcome</b>', // HTML body content
+            html: `<b>${body}</b>`, // HTML body content
           })
           .then((info) => {
             console.log('email sent: ',info.response)

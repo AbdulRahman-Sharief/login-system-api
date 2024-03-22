@@ -74,8 +74,18 @@ export class AuthController {
   }
 
 
+@Public()
+@Post('/forgot-password')
+forgetPassword(@Body() body:{email:string},@Req() req:Request){
+  // console.log(`${req.protocol}://${req.get('Host')}${req.originalUrl}`);
+  // console.log(req.protocol)
+return this.authService.forgotPassword(body.email,req);
+}
+
   @Get('/profile')
   getProfile(@Req() req:any){
     return req.user;
   }
+
+
 }
