@@ -25,6 +25,18 @@ export class AuthController {
     // console.log(credentials);
     return this.authService.register(credentials);
   }
+@Public()
+@Post('/register/verification')
+getVerificationToken(@Body() body:{email:string}, @Req() req:Request){
+  // return email
+return this.authService.getVerificationToken(body.email,req);
+}
+@Public()
+@Get('/register/verfy-token/:token')
+verifyToken(@Param('token') token:string){
+// return token
+return this.authService.verifyToken(token);
+}
 
   @Public()
   @UseGuards(LocalAuthGuard)

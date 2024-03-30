@@ -15,7 +15,7 @@ import { GithubStrategy } from './guards/github-oauth.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtGuardStrategy } from './guards/jwt-auth.strategy';
 import { LocalStrategy } from './guards/local-auth.strategy';
-import { PasswordResetToken } from 'src/entities/token.entity';
+import { PasswordResetToken, VerificationToken } from 'src/entities/token.entity';
 import { Repository } from 'typeorm';
 import { EmailService } from 'src/email/email.service';
 
@@ -30,7 +30,7 @@ import { EmailService } from 'src/email/email.service';
       },
       global:true,
     })
-  }),TypeOrmModule.forFeature([UserEntity,AccountEntity,PasswordResetToken])],
+  }),TypeOrmModule.forFeature([UserEntity,AccountEntity,PasswordResetToken,VerificationToken])],
   providers: [AuthService,JwtGuard ,GoogleOauthGuard,GoogleStrategy,GithubOauthGuard,GithubStrategy,LocalStrategy,UsersService,JwtGuardStrategy,EmailService,UsersService],
   controllers: [AuthController],
   exports: [JwtModule, PassportModule]

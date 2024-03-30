@@ -41,7 +41,7 @@ export class UsersController {
   @Post('test-send-email')
   async SendEmail(@Body() SendEmailDTO:{recipient:string; body:string}){
     // console.log(SendEmailDTO);
-    await this.emailService.example(SendEmailDTO.recipient,SendEmailDTO.body)
+    await this.emailService.resetPassword(SendEmailDTO.recipient,SendEmailDTO.body)
     
   }
 }

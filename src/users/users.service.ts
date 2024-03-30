@@ -8,7 +8,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) {}
-  async getUserByEmail(body: any) {
+  async getUserByEmail(body: {email:string}) {
     const user = await this.userRepo.findOne({ where: { email: body.email } });
     // console.log(body);
     // console.log(user);

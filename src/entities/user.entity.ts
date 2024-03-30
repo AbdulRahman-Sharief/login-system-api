@@ -28,9 +28,9 @@ export class UserEntity extends AbstractEntity {
   @Column({ unique: true ,nullable:true})
   @IsEmail()
   email: string;
-  @Column()
+  @Column({nullable:true,default:null})
   emailVerifiedAt: Date;
-  @Column()
+  @Column({nullable:true,default:null})
   @IsString()
   image: string;
 
@@ -50,11 +50,10 @@ export class UserEntity extends AbstractEntity {
   @Exclude() 
   password: string;
 
-@Column({nullable:true}) //temporarliy
+@Column({nullable:true, default:new Date()}) //temporarliy
 passwordChangedAt:Date;
   
 @BeforeInsert()
-@BeforeUpdate()
   async hashPassword() {
     if(this.password !== null){
       this.password = await bcrypt.hash(this.password, 10);
@@ -65,5 +64,14 @@ passwordChangedAt:Date;
   }
   toJSON() {
     return instanceToPlain(this);
+  }
+
+  changePasswordAfter(JWTTimestamp){
+    if (this.passwordChangedAt) {
+      const changedTimestamp = Math.floor(this.passwordChangedAt.getTime()/1000);
+      return JWTTimestamp < changedTimestamp;
+    }
+  
+    return false;
   }
 }

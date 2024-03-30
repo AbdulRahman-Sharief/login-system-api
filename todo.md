@@ -7,3 +7,15 @@
 - sends a request with the token , password, passwordConfirm to reset the password via /reset-password endpoint.
 - verify the token & its expiration data.
 - delete the token from the database.
+
+
+
+- create Verification Token upon registeration && mark the emailVerified field as false && block the user from logging in. =>DONE
+- send this token in email to the user included in a redirect url. =>DONE
+- extract the token from the url and verify the token and its expire.
+- mark the emailVerified field as true.
+- allow user to log in.
+
+- ejs templates for emails.
+- fix password-reset passsword hash issue.
+- handle error when user tries to login with email or username that does not exist.

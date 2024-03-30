@@ -13,10 +13,11 @@ import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
 import { AccountEntity } from 'src/entities/account.entity';
 import { JwtService } from '@nestjs/jwt';
-import { PasswordResetToken } from 'src/entities/token.entity';
+import { PasswordResetToken, VerificationToken } from 'src/entities/token.entity';
 import { EmailService } from 'src/email/email.service';
 import * as crypto from 'crypto';
 import { UsersService } from 'src/users/users.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,9 @@ export class AuthService {
     @InjectRepository(PasswordResetToken)
     private passwordResetTokenRepo: Repository<PasswordResetToken>,
     private emailService: EmailService,
-    private usersService:UsersService
+    private usersService:UsersService,
+    
+    @InjectRepository(VerificationToken) private verificationToken: Repository<VerificationToken>
   ) {}
 
   async register(credentials: RegisterDTO) {
@@ -43,10 +46,59 @@ export class AuthService {
       throw new InternalServerErrorException();
     }
   }
+  async getVerificationToken(email:string,req:any){
+    console.log(email);
+    try {
+      const user = this.userRepo.findOne({where:{email}});
+      if(!user) throw new NotFoundException("No such user with this email. go and signup.");
+      const verificationToken = this.verificationToken.create({email});
+      const {token} = await verificationToken.save();
+      console.log(token)
+      const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/register/verfy-token/${token}`;
+    console.log(verificationURL);
+    const SendEmail = await this.emailService.verficationToken(email, verificationURL);
+    return { token };
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async verifyToken(token:string){
+    const NOW = new Date();
+    console.log(NOW)
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const verficationToken = await this.verificationToken.findOne({
+      where: {
+        token: token,
+        expires: MoreThan(NOW),
+      },
+    });
+    console.log(verficationToken)
+    if (!verficationToken)
+      throw new NotFoundException(
+        'token is not found or may have been expired!',
+      );
+
+    const {email} = verficationToken;
+    const user = await this.usersService.getUserByEmail({email})
+    user.emailVerifiedAt = NOW;
+    const verifiedUser = await user.save();
+    console.log(verifiedUser);
+verficationToken.token = null;
+verficationToken.expires = null;
+await verficationToken.save();
+    return {
+      msg:"Congratulations, your email has been successfully verified! you can now go and login."
+    }
+    
+  }
   async login(req: any) {
     console.log(req);
+    const user = await this.usersService.getUserById(req.user.id)
+    console.log(user)
+    if(user.emailVerifiedAt === null) throw new UnauthorizedException("you have not verified your email yet, please check your inbox and verify that the email belongs to you.")
     const payload = { sub: req.user.id, username: req.user.username };
     const accessToken = await this.jwtService.signAsync(payload);
+
     return { access_token: accessToken };
   }
 
@@ -162,11 +214,10 @@ export class AuthService {
 
   async validateUser(username: string, password: string) {
     const user = await this.userRepo.findOne({ where: { username } });
-    console.log(user);
     const isPasswordCorrect = await user.comparePassword(password);
+
     console.log(isPasswordCorrect);
-    if (user && (await user.comparePassword(password))) {
-      console.log(user);
+    if (user && isPasswordCorrect) {
       return user;
     }
     return null;
@@ -187,7 +238,7 @@ export class AuthService {
       'host',
     )}/api/v1/auth/reset-password/${token.token}`;
     console.log(resetURL);
-    const SendEmail = await this.emailService.example(email, resetURL);
+    const SendEmail = await this.emailService.resetPassword(email, resetURL);
     return { reset_token };
   }
   async resetPassword(
@@ -212,11 +263,11 @@ export class AuthService {
     const user =await this.usersService.getUserByEmail({email:tokenOfUser.email});
     if(!user) throw new NotFoundException("There is no user attached to this token.");
     if(password === passwordConfirm){
-      user.password = password;
+      user.password = await bcrypt.hash(password, 10);
       user.passwordChangedAt = new Date();
       await user.save();
       tokenOfUser.token = null;
-      tokenOfUser.email = null;
+      tokenOfUser.expires = null;
       await tokenOfUser.save();
       return {msg:'password reset successfully, you can now go and login with the new credentials.'}
     }

@@ -6,10 +6,19 @@ import * as crypto from 'crypto';
 export class VerificationToken extends AbstractEntity {
   @Column()
   email: string;
-  @Column({ unique: true })
+  @Column({ unique: true,nullable:true })
   token: string;
-  @Column()
+  @Column({nullable:true})
   expires: Date;
+
+  @BeforeInsert()
+  async createPasswordResetToken(){
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.token = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.expires =new Date(Date.now() + 24 * 60 * 60 * 1000)
+    console.log(this.expires);
+    return resetToken;
+  }
 }
 
 @Entity()
