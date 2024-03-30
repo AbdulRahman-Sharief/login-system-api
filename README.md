@@ -23,8 +23,44 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
-
+a backend login system that I'll use as a boilerplate in my future projects.
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+## ⚙️Tech Stack: 
+
+➡️NestJS: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+
+➡️TypeORM: An Object-Relational Mapping (ORM) library for TypeScript and JavaScript, which works with a variety of SQL databases, including PostgreSQL (as indicated by the "pg" dependency).
+
+➡️Passport.js: A middleware for Node.js used for authentication. It supports various authentication methods and strategies, including JWT, local username/password, OAuth, etc.
+
+➡️bcrypt: A library for hashing passwords securely.
+
+➡️nodemailer: A module for sending emails.
+
+➡️dotenv: A module for loading environment variables from a .env file.
+
+➡️reflect-metadata: A library used for introspecting metadata about classes.
+
+➡️class-transformer and class-validator: Libraries used for transforming plain JavaScript objects to class instances and for input validation, respectively.
+
+
+
+## Key features: 
+
+✅allow users to register their with email , username and password.
+
+✅authenticate users' emails via verification tokens sent to their emails.
+
+✅forget password/reset password process with reset tokens sent to user's email in a one-time-link.
+
+✅allow users to fast register and login using google account.
+
+✅ allow users to fast login using github account.
+
+✅all endpoints are protected with different Guards with different strategies.
+
+✅all the project is dockerized.
 
 ## Installation
 
