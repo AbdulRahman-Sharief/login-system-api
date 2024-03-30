@@ -9,5 +9,5 @@ export class LoginDTO {
   @MinLength(4)
   password: string;
   @IsString()
-  username:string;
+  username: string;
 }

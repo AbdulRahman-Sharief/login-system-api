@@ -14,8 +14,10 @@ import { EmailService } from 'src/email/email.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService,
-    private readonly emailService:EmailService) {}
+  constructor(
+    private userService: UsersService,
+    private readonly emailService: EmailService,
+  ) {}
 
   @Post()
   async getUserByEmail(@Body() body: any) {
@@ -39,9 +41,11 @@ export class UsersController {
   }
   @Public()
   @Post('test-send-email')
-  async SendEmail(@Body() SendEmailDTO:{recipient:string; body:string}){
+  async SendEmail(@Body() SendEmailDTO: { recipient: string; body: string }) {
     // console.log(SendEmailDTO);
-    await this.emailService.resetPassword(SendEmailDTO.recipient,SendEmailDTO.body)
-    
+    await this.emailService.resetPassword(
+      SendEmailDTO.recipient,
+      SendEmailDTO.body,
+    );
   }
 }

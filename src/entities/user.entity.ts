@@ -21,16 +21,16 @@ export enum UserRole {
 
 @Entity('users')
 export class UserEntity extends AbstractEntity {
-  @Column({ unique: true,nullable:true })
+  @Column({ unique: true, nullable: true })
   @IsString()
   username: string;
 
-  @Column({ unique: true ,nullable:true})
+  @Column({ unique: true, nullable: true })
   @IsEmail()
   email: string;
-  @Column({nullable:true,default:null})
+  @Column({ nullable: true, default: null })
   emailVerifiedAt: Date;
-  @Column({nullable:true,default:null})
+  @Column({ nullable: true, default: null })
   @IsString()
   image: string;
 
@@ -46,16 +46,16 @@ export class UserEntity extends AbstractEntity {
   @OneToOne(() => TwoFactorConfirmationEntity, (tfc) => tfc.id)
   @JoinColumn({ name: 'tfcId' })
   twoFactorConfirmation: TwoFactorConfirmationEntity;
-  @Column({nullable:true})
-  @Exclude() 
+  @Column({ nullable: true })
+  @Exclude()
   password: string;
 
-@Column({nullable:true, default:new Date()}) //temporarliy
-passwordChangedAt:Date;
-  
-@BeforeInsert()
+  @Column({ nullable: true, default: new Date() }) //temporarliy
+  passwordChangedAt: Date;
+
+  @BeforeInsert()
   async hashPassword() {
-    if(this.password !== null){
+    if (this.password !== null) {
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
@@ -66,12 +66,14 @@ passwordChangedAt:Date;
     return instanceToPlain(this);
   }
 
-  changePasswordAfter(JWTTimestamp){
+  changePasswordAfter(JWTTimestamp) {
     if (this.passwordChangedAt) {
-      const changedTimestamp = Math.floor(this.passwordChangedAt.getTime()/1000);
+      const changedTimestamp = Math.floor(
+        this.passwordChangedAt.getTime() / 1000,
+      );
       return JWTTimestamp < changedTimestamp;
     }
-  
+
     return false;
   }
 }

@@ -7,8 +7,8 @@ import { EmailModule } from 'src/email/email.module';
 import { EmailService } from 'src/email/email.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]),EmailModule],
-  providers: [UsersService,EmailService],
+  imports: [TypeOrmModule.forFeature([UserEntity]), EmailModule],
+  providers: [UsersService, EmailService],
   controllers: [UsersController],
 })
 export class UsersModule {}

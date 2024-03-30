@@ -2,8 +2,8 @@ import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
 import { RegisterDTO } from './register.dto';
 
 export class SocialLoginDTO {
-    @IsNumber()
-    userId:number;
+  @IsNumber()
+  userId: number;
   @IsString()
   provider: string;
   @IsString()

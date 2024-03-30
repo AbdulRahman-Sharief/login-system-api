@@ -12,7 +12,7 @@ export class AccountEntity extends AbstractEntity {
   provider: string;
   @Column()
   providerAccountId: string;
-  @Column('text',{nullable:true})
+  @Column('text', { nullable: true })
   refresh_token: string;
   @Column('text')
   access_token: string;

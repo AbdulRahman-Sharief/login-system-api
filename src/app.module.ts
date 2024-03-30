@@ -43,7 +43,7 @@ import { EmailModule } from './email/email.module';
     //     },
     //   }),
     // }),
-      MailerModule.forRoot({
+    MailerModule.forRoot({
       // transport: {
       //   host: String(process.env.MAIL_HOST),
       //   port: Number(process.env.MAIL_PORT),
@@ -57,8 +57,8 @@ import { EmailModule } from './email/email.module';
       transport: `smtps://${process.env.MAIL_USER}:${process.env.MAIL_PASS}@${process.env.MAIL_HOST}`,
 
       defaults: {
-            from: '"nest-modules" <modules@nestjs.com>',
-          },
+        from: '"nest-modules" <modules@nestjs.com>',
+      },
       // template: {
       //   dir: __dirname + './template/notification',
       //   adapter: new EjsAdapter({  inlineCssEnabled: true,}),

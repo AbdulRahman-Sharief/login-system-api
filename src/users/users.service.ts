@@ -8,7 +8,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) {}
-  async getUserByEmail(body: {email:string}) {
+  async getUserByEmail(body: { email: string }) {
     const user = await this.userRepo.findOne({ where: { email: body.email } });
     // console.log(body);
     // console.log(user);
@@ -18,10 +18,15 @@ export class UsersService {
     const user = await this.userRepo.findOne({ where: { id } });
     return user;
   }
-  async getUserByUsername(username:string,provider:string){
+  async getUserByUsername(username: string, provider: string) {
     // const user = await this.userRepo.findOne({where:{username}});
-    const user = await this.userRepo.createQueryBuilder('user').innerJoinAndSelect('user.accounts','account').where('user.username= :username',{username}).andWhere('account.provider= :provider',{provider}).getOne();
-    console.log('USER FROM SERVICE:' ,user)
+    const user = await this.userRepo
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.accounts', 'account')
+      .where('user.username= :username', { username })
+      .andWhere('account.provider= :provider', { provider })
+      .getOne();
+    console.log('USER FROM SERVICE:', user);
     return user;
   }
 }
