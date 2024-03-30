@@ -31,6 +31,35 @@
 ```bash
 $ npm install
 ```
+## Add env variables to .env file in the root folder
+
+- `PORT`: your port.
+- `DATABASE_URL`: your database URL.
+- `DATABASE_DB`: your database name.
+
+- `DATABASE_PASSWORD`: database password.
+- `DATABASE_PORT`: database port.
+- `DATABASE_USER`: database user.
+- `DATABASE_HOST`: database host.
+
+- `AUTH_SECRET`: auth secret.
+- `JWT_SECRET`: JWT secret.
+
+- `GITHUB_CLIENT_ID`: GitHub client ID.
+- `GITHUB_CLIENT_SECRET`: GitHub client secret.
+
+- `GOOGLE_CLIENT_ID`: Google client ID.
+- `GOOGLE_CLIENT_SECRET`: Google client secret.
+- `GOOGLE_CALLBACK_URL`: Google callback URL.
+
+- `GITHUB_CALLBACK_URL`: GitHub callback URL.
+
+- `MAIL_HOST`: mail host.
+- `MAIL_PORT`: mail port.
+- `MAIL_USER`: mail user.
+- `MAIL_PASS`: mail pass.
+
+- `TZ`: Africa/Cairo.
 
 ## Running the app
 
@@ -57,17 +86,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
