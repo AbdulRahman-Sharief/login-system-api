@@ -9,7 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { MoreThan, Repository } from 'typeorm';
 import { RegisterDTO } from './dtos/register.dto';
-import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
 import { AccountEntity } from 'src/entities/account.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -63,10 +62,7 @@ export class AuthService {
       console.log(token);
       const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/register/verfy-token/${token}`;
       console.log(verificationURL);
-      const SendEmail = await this.emailService.verficationToken(
-        email,
-        verificationURL,
-      );
+      await this.emailService.verficationToken(email, verificationURL);
       return { token };
     } catch (error) {
       console.log(error);
@@ -75,7 +71,7 @@ export class AuthService {
   async verifyToken(token: string) {
     const NOW = new Date();
     console.log(NOW);
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    crypto.createHash('sha256').update(token).digest('hex');
     const verficationToken = await this.verificationToken.findOne({
       where: {
         token: token,
@@ -166,7 +162,7 @@ export class AuthService {
       };
     }
     if (userFound.image !== req.user.picture) {
-      const user = await this.userRepo.update(userFound.id, {
+      await this.userRepo.update(userFound.id, {
         image: req.user.picture,
       });
       return { message: 'User image updated upon login.', userFound };
@@ -216,7 +212,7 @@ export class AuthService {
       };
     }
     if (userFound.image !== req.user.picture) {
-      const user = await this.userRepo.update(userFound.id, {
+      await this.userRepo.update(userFound.id, {
         image: req.user.picture,
       });
       return { message: 'User image updated upon login.', userFound };
@@ -250,7 +246,7 @@ export class AuthService {
       'host',
     )}/api/v1/auth/reset-password/${token.token}`;
     console.log(resetURL);
-    const SendEmail = await this.emailService.resetPassword(email, resetURL);
+    await this.emailService.resetPassword(email, resetURL);
     return { reset_token };
   }
   async resetPassword(
@@ -260,7 +256,7 @@ export class AuthService {
   ) {
     const NOW = new Date();
     console.log(NOW);
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    crypto.createHash('sha256').update(token).digest('hex');
     const tokenOfUser = await this.passwordResetTokenRepo.findOne({
       where: {
         token: token,

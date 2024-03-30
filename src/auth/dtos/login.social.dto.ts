@@ -1,5 +1,4 @@
-import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
-import { RegisterDTO } from './register.dto';
+import { IsNumber, IsString } from 'class-validator';
 
 export class SocialLoginDTO {
   @IsNumber()

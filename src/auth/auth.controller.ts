@@ -11,16 +11,12 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dtos/register.dto';
-import { LoginDTO } from './dtos/login.dto';
 import { SocialLoginDTO } from './dtos/login.social.dto';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { Response } from 'express';
-import { GoogleStrategy } from './guards/google-oauth.strategy';
 import { UsersService } from 'src/users/users.service';
 import { GithubOauthGuard } from './guards/github-oauth.guard';
-import { GithubStrategy } from './guards/github-oauth.strategy';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtGuard } from './guards/jwt-auth.guard';
 import { Public } from 'src/decorators/Public.decorator';
 
 @Controller('auth')
@@ -64,7 +60,8 @@ export class AuthController {
   @Public()
   @Get('callback/google')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async googleAuthCallback(@Req() _req: Request, @Res() _res: Response) {
     return { msg: 'Authentication with Google' };
   }
   @Public()
@@ -81,7 +78,8 @@ export class AuthController {
   @Public()
   @Get('callback/github')
   @UseGuards(GithubOauthGuard)
-  async githubAuthCallback(@Req() req: Request, @Res() res: Response) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async githubAuthCallback(@Req() _req: Request, @Res() _res: Response) {
     console.log('Authentication with GitHub');
     return { msg: 'Authentication with GitHub' };
   }

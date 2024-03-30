@@ -2,7 +2,8 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 export class DatabaseConnectionService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(
-    connectionName?: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _connectionName?: string,
   ): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
     return {
       name: 'default',

@@ -4,7 +4,6 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  InternalServerErrorException,
   Param,
   Post,
 } from '@nestjs/common';

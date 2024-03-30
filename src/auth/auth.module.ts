@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { AccountEntity } from 'src/entities/account.entity';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { JwtGuard } from './guards/jwt-auth.guard';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GoogleStrategy } from './guards/google-oauth.strategy';
@@ -19,7 +19,6 @@ import {
   PasswordResetToken,
   VerificationToken,
 } from 'src/entities/token.entity';
-import { Repository } from 'typeorm';
 import { EmailService } from 'src/email/email.service';
 
 @Module({
