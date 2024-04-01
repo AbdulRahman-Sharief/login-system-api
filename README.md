@@ -23,14 +23,79 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
-
+a backend login system that I'll use as a boilerplate in my future projects.
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+## ⚙️Tech Stack: 
+
+➡️NestJS: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+
+➡️TypeORM: An Object-Relational Mapping (ORM) library for TypeScript and JavaScript, which works with a variety of SQL databases, including PostgreSQL (as indicated by the "pg" dependency).
+
+➡️Passport.js: A middleware for Node.js used for authentication. It supports various authentication methods and strategies, including JWT, local username/password, OAuth, etc.
+
+➡️bcrypt: A library for hashing passwords securely.
+
+➡️nodemailer: A module for sending emails.
+
+➡️dotenv: A module for loading environment variables from a .env file.
+
+➡️reflect-metadata: A library used for introspecting metadata about classes.
+
+➡️class-transformer and class-validator: Libraries used for transforming plain JavaScript objects to class instances and for input validation, respectively.
+
+
+
+## Key features: 
+
+✅allow users to register their with email , username and password.
+
+✅authenticate users' emails via verification tokens sent to their emails.
+
+✅forget password/reset password process with reset tokens sent to user's email in a one-time-link.
+
+✅allow users to fast register and login using google account.
+
+✅ allow users to fast login using github account.
+
+✅all endpoints are protected with different Guards with different strategies.
+
+✅all the project is dockerized.
 
 ## Installation
 
 ```bash
 $ npm install
 ```
+## Add env variables to .env file in the root folder
+
+- `PORT`: your port.
+- `DATABASE_URL`: your database URL.
+- `DATABASE_DB`: your database name.
+
+- `DATABASE_PASSWORD`: database password.
+- `DATABASE_PORT`: database port.
+- `DATABASE_USER`: database user.
+- `DATABASE_HOST`: database host.
+
+- `AUTH_SECRET`: auth secret.
+- `JWT_SECRET`: JWT secret.
+
+- `GITHUB_CLIENT_ID`: GitHub client ID.
+- `GITHUB_CLIENT_SECRET`: GitHub client secret.
+
+- `GOOGLE_CLIENT_ID`: Google client ID.
+- `GOOGLE_CLIENT_SECRET`: Google client secret.
+- `GOOGLE_CALLBACK_URL`: Google callback URL.
+
+- `GITHUB_CALLBACK_URL`: GitHub callback URL.
+
+- `MAIL_HOST`: mail host.
+- `MAIL_PORT`: mail port.
+- `MAIL_USER`: mail user.
+- `MAIL_PASS`: mail pass.
+
+- `TZ`: Africa/Cairo.
 
 ## Running the app
 
@@ -57,17 +122,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
